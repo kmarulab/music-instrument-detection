@@ -17,6 +17,6 @@ The aim is to **compare a classic Digital-Signal-Processing (DSP) workflow in MA
 | **Feature philosophy** | “Know what to listen for.” You explicitly pick spectro-temporal descriptors grounded in psycho-acoustics. | “Let the network decide.” Convolutional layers learn filters jointly with the classifier. |
 | **Interactivity** | Immediate visual feedback via *Classification Learner* charts (ROC, confusion matrix). | Script-driven; metrics printed to console, but scalable to larger datasets and GPUs. |
 | **Transparency** | Easy to plot individual MFCCs, centroids, etc. | Requires probing activations / saliency maps to interpret learned features. |
-| **Hardware needs** | CPU-only is fine (runs in seconds). | Benefits from NVIDIA GPU (mixed-precision cuts training time). |
+| **Hardware needs** | CPU-only is fine. | Benefits from NVIDIA GPU (mixed-precision cuts training time). |
 
 The project is intentionally structured so you can **swap datasets** and **replicate experiments** quickly in either branch, then compare accuracy, training time, and interpretability.
