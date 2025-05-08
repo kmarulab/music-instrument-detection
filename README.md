@@ -12,7 +12,7 @@ The aim is to **compare a classic Digital-Signal-Processing (DSP) workflow in MA
 
 ## Directory Layout
 
-instrument-classification/
+repo/
 ├── dataset/                  # raw audio (kept out of Git since it is bulky) 
 │   ├── cello/   *.wav
 │   ├── flute/   *.wav
