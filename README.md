@@ -13,23 +13,25 @@ The aim is to **compare a classic Digital-Signal-Processing (DSP) workflow in MA
 ## Directory Layout
 
 instrument-classification/
-├── dataset/ 
-│ ├── cello/ *.wav
-│ ├── flute/ *.wav
-│ └── …
+├── dataset/                  # raw audio (kept out of Git since it is bulky) 
+│   ├── cello/   *.wav
+│   ├── flute/   *.wav
+│   └── …/
 │
-├── matlab-dsp-approach/ # MATLAB + DSP feature pipeline
-│ └── extractInstrumentFeatures.m
-│ └── README.md
+├── matlab-dsp-approach/      
+│   ├── extractInstrumentFeatures.m
+│   └── README.md
 │
-├── python-ml-approach/ # Deep-learning pipeline
-│ ├── config.yaml
-│ ├── dataset.py
-│ ├── model.py
-│ ├── train.py
-│ └── predict.py
-│ └── README.md
-└── README.md 
+├── python-ml-approach/       
+│   ├── config.yaml
+│   ├── dataset.py
+│   ├── model.py
+│   ├── train.py
+│   ├── predict.py
+│   └── README.md
+│
+└── README.md                 
+
 
 ## Comparisons
 
