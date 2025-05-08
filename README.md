@@ -10,30 +10,6 @@ The aim is to **compare a classic Digital-Signal-Processing (DSP) workflow in MA
 
 ---
 
-## Directory Layout
-
-instrument-classification/
-├── dataset/                 # raw audio (not tracked by Git)
-│   ├── cello/               
-│   ├── flute/               
-│   └── …/
-│
-├── matlab-dsp-approach/     
-│   ├── extractInstrumentFeatures.m
-│   └── README.md
-│
-├── python-ml-approach/      
-│   ├── config.yaml
-│   ├── dataset.py
-│   ├── model.py
-│   ├── train.py
-│   ├── predict.py
-│   └── README.md
-│
-└── README.md                
-               
-
-
 ## Comparisons
 
 | Dimension | MATLAB (DSP) | Python (ML) |
