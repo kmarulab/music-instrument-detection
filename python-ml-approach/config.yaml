@@ -3,5 +3,5 @@ n_mels: 64
 fmin: 50
 fmax: 11025
 batch_size: 32
-lr: 1e-3
+lr: 5e-4
 epochs: 30

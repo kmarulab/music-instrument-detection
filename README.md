@@ -1,95 +1,44 @@
-# Instrument Classification – Python‑only Pipeline
+# Music-Instrument-Classification Project
 
-End‑to‑end deep‑learning workflow for recognising musical instruments from appx 5‑second WAV clips.
+This repository contains **two parallel signal-analysis pipelines** for recognising musical instruments from short instrument audio clips.  
+The aim is to **compare a classic Digital-Signal-Processing (DSP) workflow in MATLAB with a modern machine-learning approach in Python**:
 
-```
-repo/
-├── dataset/            # parent dir (one sub‑folder per instrument)
-│   ├── cello/ *.wav
-│   ├── flute/ *.wav
-│   └── …
-├── config.yaml         # hyper‑parameters
-├── dataset.py          # PyTorch Dataset + split logic
-├── model.py            # SmallCNN with global‑avg‑pool
-├── train.py            # AMP‑enabled training loop (saves best_model.pt)
-├── predict.py          # single‑file inference utility
-└── README.md    
-```
+| Approach | Core Idea | Toolchain |
+|----------|-----------|-----------|
+| **MATLAB / DSP** | Hand-design acoustic features and feed the aggregated feature table into MATLAB’s *Classification Learner*. | MATLAB (R2021a +) + Audio Toolbox |
+| **Python / ML** | Learn features end-to-end from log-Mel spectrograms using a lightweight CNN trained with PyTorch, accelerated on GPU + AMP. | Python 3.9 – 3.12, PyTorch 2.x |
 
 ---
 
-## 1  Setup
+## Directory Layout
 
-```bash
-python -m venv venv && source venv/bin/activate
-pip install torch torchaudio librosa soundfile tqdm pyyaml
-```
+instrument-classification/
+├── dataset/ 
+│ ├── cello/ *.wav
+│ ├── flute/ *.wav
+│ └── …
+│
+├── matlab-dsp-approach/ # MATLAB + DSP feature pipeline
+│ └── extractInstrumentFeatures.m
+│ └── README.md
+│
+├── python-ml-approach/ # Deep-learning pipeline
+│ ├── config.yaml
+│ ├── dataset.py
+│ ├── model.py
+│ ├── train.py
+│ └── predict.py
+│ └── README.md
+│
+└── README.md 
 
----
+## Comparisons
 
-## 2  Training
+| Dimension | MATLAB (DSP) | Python (ML) |
+|-----------|--------------|-------------|
+| **Feature philosophy** | “Know what to listen for.” You explicitly pick spectro-temporal descriptors grounded in psycho-acoustics. | “Let the network decide.” Convolutional layers learn filters jointly with the classifier. |
+| **Interactivity** | Immediate visual feedback via *Classification Learner* charts (ROC, confusion matrix). | Script-driven; metrics printed to console, but scalable to larger datasets and GPUs. |
+| **Transparency** | Easy to plot individual MFCCs, centroids, etc. | Requires probing activations / saliency maps to interpret learned features. |
+| **Hardware needs** | CPU-only is fine (runs in seconds). | Benefits from NVIDIA GPU (mixed-precision cuts training time). |
 
-1. **Put audio** under `dataset/InstrumentName/*.wav` (any depth works; script glob‑scans).
-2. Edit `config.yaml` if you want different Mel bins, learning rate, etc.
-
-```bash
-python train.py --data_dir dataset              # uses config.yaml
-# override on command line - RECOMMENDED
-python train.py --data_dir dataset --epochs 40 --lr 5e-4
-```
-
-### What happens under the hood
-
-| Stage        | Highlights                                                                                        |
-| ------------ | ------------------------------------------------------------------------------------------------- |
-| Dataset scan | Splits ≈80 % / 10 % / 10 % (train/val/test) per folder, shuffles for reproducibility.             |
-| Front‑end    | On‑the‑fly log‑Mel spectrogram (64 bins, 22.05 kHz, 25 ms frame, 10 ms hop).                      |
-| Model        | 3× Conv‑BN‑ReLU‑Pool → GlobalAvgPool → FC(64→128→*n*) with dropout. Shape‑agnostic thanks to GAP. |
-| Optimiser    | AdamW + mixed‑precision (`torch.amp.autocast` + `GradScaler`).                                    |
-| Checkpoint   | Saves `best_model.pt` containing `state_dict`, `n_classes`, `label_names`, and full config.       |
-
-Estimated speed: **≈4 min** on an RTX A1000 with 2 k training clips; scales with GPU.
-
----
-
-## 3  Inference
-
-```bash
-# simplest – checkpoint already stores label_names
-audio=dataset/ukulele/42.wav
-python predict.py $audio --ckpt best_model.pt
-
-# checkpoint missing names? provide mapping file
-echo -e "cello\nflute\nsaxophone\ntrumpet\nukulele\nviolin" > labels.txt
-python predict.py $audio --ckpt best_model.pt --labels labels.txt
-```
-
-Output example:
-
-```
-Predicted instrument: ukulele  (p=0.93)
-```
-
----
-
-## 4  Hyper‑parameter reference (`config.yaml`)
-
-```yaml
-sample_rate: 22050  # Hz
-n_mels: 64
-batch_size: 32
-lr: 1e-3
-epochs: 30
-```
-
-Change any field or override via CLI.
-
----
-
-## 5  Extending
-
-* **Data augmentation** – add `torchaudio.transforms.FrequencyMasking`, pitch‑shift with `librosa.effects.pitch_shift`, etc.
-* **Larger models** – swap `SmallCNN` with `torch.hub.load('pytorch/audio', 'resnet18')` and fine‑tune.
-* **Export** – `torch.onnx.export` then run through TensorRT for sub‑5 ms inference.
-
-MIT License – free to use, tweak, and share.
+The project is intentionally structured so you can **swap datasets** and **replicate experiments** quickly in either branch, then compare accuracy, training time, and interpretability.

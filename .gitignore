@@ -2,11 +2,11 @@
 venv/
 
 # Byte-compiled / cache files
-__pycache__/
+python-ml-approach/__pycache__/
 
 # Raw audio dataset
 music_dataset/
 string_instruments/
 
 # Trained model checkpoint
-best_model.pt
+python-ml-approach/best_model.pt
