@@ -1,0 +1,7 @@
+sample_rate: 22050
+n_mels: 64
+fmin: 50
+fmax: 11025
+batch_size: 32
+lr: 1e-3
+epochs: 30
