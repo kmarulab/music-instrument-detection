@@ -29,7 +29,6 @@ instrument-classification/
 │ ├── train.py
 │ └── predict.py
 │ └── README.md
-│
 └── README.md 
 
 ## Comparisons
