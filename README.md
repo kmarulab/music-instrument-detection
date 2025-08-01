@@ -8,3 +8,5 @@ This repository contains **python ml model** for recognising musical instruments
 ---
 
 The project is intentionally structured so you can **swap datasets** and **replicate experiments** quickly in either branch, then compare accuracy, training time, and interpretability.
+
+If you'd like the datasets used for training, feel free to shoot me an email at emkboruett@gmail.com
